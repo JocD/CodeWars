@@ -2,6 +2,7 @@ var should = require('chai').should();
 
 var hamming = require('./hamming_number');
 
+
 describe('Hamming Numbers', function () {
   it('Tests', function () {
     hamming(1).should.equal(1);
@@ -27,15 +28,21 @@ describe('Hamming Numbers', function () {
     hamming(133).should.equal(3840);
     hamming(222).should.equal(24300);
     hamming(300).should.equal(82944);
+    hamming(332).should.equal(131072);
     hamming(400).should.equal(311040);
     hamming(500).should.equal(937500);
   });
-  it('Test computing the upper bounds of the exercise', function () {
+  it('Test higher numbers', function () {
     hamming(1000).should.equal(51200000);
+    hamming(1570).should.equal(1209323520);
     hamming(2000).should.equal(8062156800);
     hamming(3000).should.equal(278942752080);
-    hamming(4000).should.equal(4701849845760);
     hamming(5000).should.equal(50837316566580);
-    // hamming(10000).should.equal(257492065429687500);
   });
+  // it('Testing first 5000 Hamming Numbers', function () {
+  //   for (let i = 1; i <= 5000; i++) {
+  //    hamming(i);
+  //    }
+  //    done();
+  // });
 });

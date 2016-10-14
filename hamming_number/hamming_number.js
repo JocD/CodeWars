@@ -1,14 +1,27 @@
+let MinHeap = require('../heap/minHeap');
 function hamming(n) {
-  let res = [1];
-  let min = 1;
+  let heap = new MinHeap(1);
+  let min = heap.peek();
 
-  for(let i = 1; i <= n; i++){
-    min = Math.min(...res);
-    res.splice(res.indexOf(min),1);
-    if(res.indexOf(2 * min) === -1){res.push(2 * min);}
-    if(res.indexOf(3 * min) === -1){res.push(3 * min);}
-    if(res.indexOf(5 * min) === -1){res.push(5 * min);}
+  for (let i = 0; i < n; i++) {
+    let factor2 = 2 * min;
+    let factor3 = 3 * min;
+    let factor5 = 5 * min;
+
+    if (!heap.contains(factor2)) {
+      heap.insert(factor2);
+    }
+
+    if (!heap.contains(factor3)) {
+      heap.insert(factor3);
+    }
+
+    if (!heap.contains(factor5)) {
+      heap.insert(factor5);
+    }
+    min = heap.extract();
   }
   return min;
 }
+
 module.exports = hamming;
