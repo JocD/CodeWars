@@ -1,9 +1,9 @@
 let MinHeap = require('../heap/minHeap');
-function hamming(n) {
+function* hammingGen(n) {
   let heap = new MinHeap(1);
   let min = heap.peek();
-
-  for (let i = 0; i < n; i++) {
+  let i = 0;
+  while (true) {
     let factor2 = 2 * min;
     let factor3 = 3 * min;
     let factor5 = 5 * min;
@@ -20,8 +20,13 @@ function hamming(n) {
       heap.insert(factor5);
     }
     min = heap.extract();
+    i++;
+    yield min;
   }
-  return min;
+}
+let helper = hammingGen(1);
+function hamming(n){
+  return helper.next().value;
 }
 
 module.exports = hamming;
