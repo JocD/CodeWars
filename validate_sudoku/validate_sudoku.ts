@@ -26,48 +26,63 @@ export class Sudoku {
 
     public _checkRow(x: number): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            let size = this._getSize();
-            let arr = this._num();
-            let sum = 0;
-            for (let i = 0; i < size; i++) {
-                if (this._checkCell(x, i, arr)) {
-                    sum += this._grid[x][i];
-                    delete arr[arr.indexOf(this._grid[x][i])];
+            try {
+                let size = this._getSize();
+                let arr = this._num();
+                let sum = 0;
+                for (let i = 0; i < size; i++) {
+                    if (this._checkCell(x, i, arr)) {
+                        sum += this._grid[x][i];
+                        delete arr[arr.indexOf(this._grid[x][i])];
+                    }
                 }
+                resolve(sum === this._sum);
             }
-            resolve(sum === this._sum);
+            catch (e) {
+                reject(<Error> e.message)
+            }
         });
     }
 
     public _checkColumn(y: number): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            let size = this._getSize();
-            let arr = this._num();
-            let sum = 0;
-            for (let i = 0; i < size; i++) {
-                if (this._checkCell(i, y, arr)) {
-                    sum += this._grid[i][y];
-                    delete arr[arr.indexOf(this._grid[i][y])];
+            try {
+                let size = this._getSize();
+                let arr = this._num();
+                let sum = 0;
+                for (let i = 0; i < size; i++) {
+                    if (this._checkCell(i, y, arr)) {
+                        sum += this._grid[i][y];
+                        delete arr[arr.indexOf(this._grid[i][y])];
+                    }
                 }
+                resolve(sum === this._sum);
             }
-            resolve(sum === this._sum);
+            catch (e) {
+                reject(<Error> e.message)
+            }
         });
     }
 
     public _checkBox(x: number, y: number): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            let subSize = Math.sqrt(this._getSize());
-            let arr = this._num();
-            let sum = 0;
-            for (let i = x; i < x + subSize; i++) {
-                for (let j = y; j < y + subSize; j++) {
-                    if (this._checkCell(i, j, arr)) {
-                        sum += this._grid[i][j];
-                        delete arr[arr.indexOf(this._grid[i][j])];
+            try {
+                let subSize = Math.sqrt(this._getSize());
+                let arr = this._num();
+                let sum = 0;
+                for (let i = x; i < x + subSize; i++) {
+                    for (let j = y; j < y + subSize; j++) {
+                        if (this._checkCell(i, j, arr)) {
+                            sum += this._grid[i][j];
+                            delete arr[arr.indexOf(this._grid[i][j])];
+                        }
                     }
                 }
+                resolve(sum === this._sum);
             }
-            resolve(sum === this._sum);
+            catch (e) {
+                reject(<Error> e.message)
+            }
         });
     }
 
@@ -110,8 +125,8 @@ export class Sudoku {
                 res[i++] = this._checkRow(x);
             }
             isValid = Promise.all(res).then((val) => {
-                return val.reduce((p,c) => {
-                   return p && c;
+                return val.reduce((p, c) => {
+                    return p && c;
                 });
             });
         }
