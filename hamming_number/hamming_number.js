@@ -25,7 +25,7 @@ function* hammingGen(n) {
   }
 }
 let helper = hammingGen(1);
-function hamming(n){
+function hamming(n) {
   return helper.next().value;
 }
 
