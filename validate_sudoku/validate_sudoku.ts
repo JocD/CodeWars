@@ -24,91 +24,96 @@ export class Sudoku {
         return Number.isInteger(num) && num > 0 && num <= this._getSize() && arr.indexOf(num) !== -1;
     }
 
-    private _checkRow(x: number): boolean {
-        let size = this._getSize();
-        let arr = this._num();
-        let sum = 0;
-        for (let i = 0; i < size; i++) {
-            if (this._checkCell(x, i, arr)) {
-                sum += this._grid[x][i];
-                delete arr[arr.indexOf(this._grid[x][i])];
-            }
-        }
-        return sum === this._sum;
-    }
-
-    private _checkColumn(y: number): boolean {
-        let size = this._getSize();
-        let arr = this._num();
-        let sum = 0;
-        for (let i = 0; i < size; i++) {
-            if (this._checkCell(i, y, arr)) {
-                sum += this._grid[i][y];
-                delete arr[arr.indexOf(this._grid[i][y])];
-            }
-        }
-        return sum === this._sum;
-    }
-
-    private _checkBox(x: number, y: number): boolean {
-        let size = Math.sqrt(this._getSize());
-        let arr = this._num();
-        let sum = 0;
-        for (let i = x; i < x + size; i++) {
-            for (let j = y; j < y + size; j++) {
-                if (this._checkCell(i, j, arr)) {
-                    sum += this._grid[i][j];
-                    delete arr[arr.indexOf(this._grid[i][j])];
+    public _checkRow(x: number): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            let size = this._getSize();
+            let arr = this._num();
+            let sum = 0;
+            for (let i = 0; i < size; i++) {
+                if (this._checkCell(x, i, arr)) {
+                    sum += this._grid[x][i];
+                    delete arr[arr.indexOf(this._grid[x][i])];
                 }
             }
-        }
-        return sum === this._sum;
+            resolve(sum === this._sum);
+        });
     }
 
-    private _getSize(): number {
+    public _checkColumn(y: number): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            let size = this._getSize();
+            let arr = this._num();
+            let sum = 0;
+            for (let i = 0; i < size; i++) {
+                if (this._checkCell(i, y, arr)) {
+                    sum += this._grid[i][y];
+                    delete arr[arr.indexOf(this._grid[i][y])];
+                }
+            }
+            resolve(sum === this._sum);
+        });
+    }
+
+    public _checkBox(x: number, y: number): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            let subSize = Math.sqrt(this._getSize());
+            let arr = this._num();
+            let sum = 0;
+            for (let i = x; i < x + subSize; i++) {
+                for (let j = y; j < y + subSize; j++) {
+                    if (this._checkCell(i, j, arr)) {
+                        sum += this._grid[i][j];
+                        delete arr[arr.indexOf(this._grid[i][j])];
+                    }
+                }
+            }
+            resolve(sum === this._sum);
+        });
+    }
+
+    public _getSize(): number {
         return this._grid.length;
     }
 
-    private _checkSize(): boolean {
+    public _checkSize(): Promise<boolean> {
         let size = this._getSize();
         if (!Number.isInteger(Math.sqrt(size))) {
-            return false;
+            return Promise.resolve(false);
         }
 
         for (let i = 0; i < size; i++) {
             if (this._grid[i].length !== size) {
-                return false;
+                return Promise.resolve(false);
             }
         }
-        return true;
+        return Promise.resolve(true);
     }
 
-    public isValid(): boolean {
-        let isValid = this._checkSize();
+    public async isValid(): Promise<boolean> {
+        let isValid: Promise<boolean> = this._checkSize();
         if (isValid) {
-            let size = this._getSize();
-            let subSize = Math.sqrt(size);
+            let size: number = this._getSize();
+            let subSize: number = Math.sqrt(size);
+            let res: Array<Promise<boolean>> = new Array<Promise<boolean>>(size * 3);
+            let i = 0;
             for (let x = 0; x < size; x = x + subSize) {
                 for (let y = 0; y < size; y = y + subSize) {
-                    isValid = this._checkBox(x, y);
-                    if (!isValid) {
-                        return isValid;
-                    }
+                    res[i++] = this._checkBox(x, y);
                 }
             }
+
             for (let y = 0; y < size; y++) {
-                isValid = this._checkColumn(y);
-                if (!isValid) {
-                    return isValid;
-                }
+                res[i++] = this._checkColumn(y);
             }
 
             for (let x = 0; x < size; x++) {
-                isValid = this._checkRow(x);
-                if (!isValid) {
-                    return isValid;
-                }
+                res[i++] = this._checkRow(x);
             }
+            isValid = Promise.all(res).then((val) => {
+                return val.reduce((p,c) => {
+                   return p && c;
+                });
+            });
         }
         return isValid;
     }
