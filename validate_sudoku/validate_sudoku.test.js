@@ -2,14 +2,14 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
 /// <reference path="../typings/mocha/mocha.d.ts" />
-const chai = require('chai');
-const validate_sudoku_1 = require('./validate_sudoku');
+const chai = require("chai");
+const validate_sudoku_1 = require("./validate_sudoku");
 let should = chai.should();
 let goodSudoku1 = new validate_sudoku_1.Sudoku([
     [7, 8, 4, 1, 5, 9, 3, 2, 6],
@@ -47,18 +47,10 @@ let badSudoku2 = new validate_sudoku_1.Sudoku([
 ]);
 describe('Valid _checkSize', function () {
     it('Validate _checkSize', function () {
-        badSudoku1._checkSize().then((val) => {
-            val.should.equal(true);
-        });
-        badSudoku2._checkSize().then((val) => {
-            val.should.equal(false);
-        });
-        goodSudoku1._checkSize().then((val) => {
-            val.should.equal(true);
-        });
-        goodSudoku2._checkSize().then((val) => {
-            val.should.equal(true);
-        });
+        badSudoku1._checkSize().should.equal(true);
+        badSudoku2._checkSize().should.equal(false);
+        goodSudoku1._checkSize().should.equal(true);
+        goodSudoku2._checkSize().should.equal(true);
     });
 });
 describe('Validate _checkRow', function () {

@@ -49,18 +49,10 @@ let badSudoku2 = new Sudoku([
 
 describe('Valid _checkSize', function () {
     it('Validate _checkSize', function () {
-        badSudoku1._checkSize().then((val) => {
-            val.should.equal(true);
-        });
-        badSudoku2._checkSize().then((val) => {
-            val.should.equal(false);
-        });
-        goodSudoku1._checkSize().then((val) => {
-            val.should.equal(true);
-        });
-        goodSudoku2._checkSize().then((val) => {
-            val.should.equal(true);
-        });
+        badSudoku1._checkSize().should.equal(true);
+        badSudoku2._checkSize().should.equal(false);
+        goodSudoku1._checkSize().should.equal(true);
+        goodSudoku2._checkSize().should.equal(true);
     });
 });
 

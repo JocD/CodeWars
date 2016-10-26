@@ -90,22 +90,22 @@ export class Sudoku {
         return this._grid.length;
     }
 
-    public _checkSize(): Promise<boolean> {
+    public _checkSize(): boolean {
         let size = this._getSize();
         if (!Number.isInteger(Math.sqrt(size))) {
-            return Promise.resolve(false);
+            return false;
         }
 
         for (let i = 0; i < size; i++) {
             if (this._grid[i].length !== size) {
-                return Promise.resolve(false);
+                return false;
             }
         }
-        return Promise.resolve(true);
+        return true;
     }
 
     public async isValid(): Promise<boolean> {
-        let isValid: Promise<boolean> = this._checkSize();
+        let isValid: Promise<boolean> | boolean = await this._checkSize();
         if (isValid) {
             let size: number = this._getSize();
             let subSize: number = Math.sqrt(size);
