@@ -9,7 +9,9 @@
   "author": "Jacques Dukes",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.33",
     "chai": "*",
-    "mocha": "*"
+    "mocha": "^3.2.0"
   }
 }
